@@ -1,0 +1,39 @@
+# Dependencies
+node_modules/
+.npm
+
+# Environment
+.env
+.env.local
+.env.production
+
+# Build outputs
+dist/
+build/
+
+# Uploads (don't commit user files)
+backend/uploads/resumes/*
+!backend/uploads/resumes/.gitkeep
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Vite
+frontend/.vite/
+node_modules/
+.env
+dist/
+build/
+.vscode/
+*.log
+coverage/
+uploads/
