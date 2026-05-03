@@ -1,14 +1,31 @@
 import axios from "axios";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+let baseURL = import.meta.env.VITE_API_URL;
+
+// Fallback and auto-formatting
+if (!baseURL) {
+  console.warn("VITE_API_URL is missing! Defaulting to '/api'.");
+  baseURL = "/api";
+} else {
+  // 1. Ensure it starts with http
+  // 2. Ensure it ends with /api/ to prevent absolute path overrides
+  if (baseURL.startsWith("http")) {
+    if (!baseURL.endsWith("/api") && !baseURL.endsWith("/api/")) {
+      baseURL = baseURL.endsWith("/") ? `${baseURL}api/` : `${baseURL}/api/`;
+    } else if (!baseURL.endsWith("/")) {
+      baseURL = `${baseURL}/`;
+    }
+  }
+}
 
 const api = axios.create({
-  baseURL: API_URL,
-  headers: { "Content-Type": "application/json" },
-  withCredentials: true,
+  baseURL,
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
-// ── Request Interceptor: attach JWT token ──────────────────────────────────────
+// Attach token to requests if it exists
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
@@ -17,20 +34,7 @@ api.interceptors.request.use(
     }
     return config;
   },
-  (error) => Promise.reject(error)
-);
-
-// ── Response Interceptor: handle auth errors globally ─────────────────────────
-api.interceptors.response.use(
-  (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      if (window.location.pathname !== "/login") {
-        window.location.href = "/login";
-      }
-    }
     return Promise.reject(error);
   }
 );

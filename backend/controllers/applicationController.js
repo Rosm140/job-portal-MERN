@@ -13,6 +13,11 @@ const applyForJob = async (req, res, next) => {
     if (!job) return sendResponse(res, 404, false, "Job not found.");
     if (job.status !== "active") return sendResponse(res, 400, false, "This job is no longer accepting applications.");
 
+    // Prevent application if the deadline has passed
+    if (job.deadline && new Date(job.deadline) < new Date()) {
+      return sendResponse(res, 400, false, "The application deadline for this job has passed.");
+    }
+
     // Check if already applied
     const existing = await Application.findOne({ job: jobId, applicant: req.user._id });
     if (existing) return sendResponse(res, 409, false, "You have already applied for this job.");

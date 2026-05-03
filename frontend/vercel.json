@@ -6,6 +6,6 @@
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "env": {
-    "VITE_API_URL": "https://your-backend.onrender.com/api"
+    "VITE_API_URL": "https://job-portal-mern-0sy6.onrender.com/api"
   }
 }

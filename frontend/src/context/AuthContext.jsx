@@ -40,10 +40,13 @@ export const AuthProvider = ({ children }) => {
           const res = await authAPI.getMe();
           dispatch({ type: "LOGIN_SUCCESS", payload: { user: res.data.user, token } });
           localStorage.setItem("user", JSON.stringify(res.data.user));
-        } catch {
-          localStorage.removeItem("token");
-          localStorage.removeItem("user");
-          dispatch({ type: "LOGOUT" });
+        } catch (error) {
+          // Only logout if it's an authentication error (401/403)
+          if (error.response?.status === 401 || error.response?.status === 403) {
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+            dispatch({ type: "LOGOUT" });
+          }
         }
       }
       dispatch({ type: "INITIALIZED" });
@@ -62,6 +65,7 @@ export const AuthProvider = ({ children }) => {
       toast.success(`Welcome back, ${user.fullName.split(" ")[0]}! 👋`);
       return { success: true, user };
     } catch (error) {
+      console.error("Login attempt failed:", { url: error.config?.url, status: error.response?.status, data: error.response?.data });
       const msg = error.response?.data?.message || "Login failed. Please try again.";
       toast.error(msg);
       dispatch({ type: "SET_LOADING", payload: false });

@@ -1,6 +1,3 @@
-
-
-// To this:
 import { useAuth } from "../context/AuthContext";
 import { Input, Button } from "../components/ui";
 import { useJobs } from "../hooks/useJobs";

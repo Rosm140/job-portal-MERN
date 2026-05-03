@@ -224,23 +224,13 @@ const FormSection = ({ title, children }) => (
 const TagInput = ({ placeholder, value, onChange, onAdd, tags, onRemove, multiline }) => (
   <div>
     <div className="flex gap-2">
-      {multiline ? (
-        <input
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder={placeholder}
-          onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); onAdd(); } }}
-          className="flex-1 bg-gray-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-blue-500/50"
-        />
-      ) : (
-        <input
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder={placeholder}
-          onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); onAdd(); } }}
-          className="flex-1 bg-gray-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-blue-500/50"
-        />
-      )}
+      <input
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); onAdd(); } }}
+        className="flex-1 bg-gray-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-blue-500/50"
+      />
       <button type="button" onClick={onAdd} className="p-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl transition-colors">
         <Plus size={16} />
       </button>
