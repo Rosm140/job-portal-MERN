@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { applicationsAPI } from "../api/applicationsAPI";
+import { applicationsAPI } from "@/api/applicationsAPI";
 import toast from "react-hot-toast";
 export const useMyApplications = (params = {}) => {
   const [applications, setApplications] = useState([]); const [pagination, setPagination] = useState(null); const [isLoading, setIsLoading] = useState(false);

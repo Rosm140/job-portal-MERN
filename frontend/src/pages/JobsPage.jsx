@@ -1,10 +1,9 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useJobs } from "@/hooks/useJobs";
 import JobCard from "@/components/jobs/JobCard";
 import { LoadingPage, EmptyState, Button } from "@/components/ui";
 import { Briefcase, ChevronLeft, ChevronRight, SlidersHorizontal, X, Search, MapPin } from "lucide-react";
-import { useState } from "react";
 import { applicationsAPI } from "@/api/applicationsAPI";
 import { useAuth } from "@/context/AuthContext";
 import toast from "react-hot-toast";
@@ -25,6 +24,15 @@ const JobsPage = () => {
   const [bookmarks, setBookmarks] = useState(() => {
     try { return JSON.parse(localStorage.getItem("bookmarks") || "[]"); } catch { return []; }
   });
+
+  // Local state for inputs to ensure they clear when resetFilters is called
+  const [localSearch, setLocalSearch] = useState(params.search || "");
+  const [localLocation, setLocalLocation] = useState(params.location || "");
+
+  useEffect(() => {
+    setLocalSearch(params.search || "");
+    setLocalLocation(params.location || "");
+  }, [params.search, params.location]);
 
   const handleBookmark = (jobId, saved) => {
     const updated = saved ? [...bookmarks, jobId] : bookmarks.filter((id) => id !== jobId);
@@ -58,18 +66,20 @@ const JobsPage = () => {
               <Search size={14} className="text-gray-400" />
             </div>
             <input
-              defaultValue={params.search || ""}
+              value={localSearch}
               placeholder="Job title, skills..."
-              onKeyDown={(e) => { if (e.key === "Enter") updateParams({ search: e.target.value, page: 1 }); }}
+              onChange={(e) => setLocalSearch(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter") updateParams({ search: localSearch, page: 1 }); }}
               className="flex-1 px-3 py-2 text-sm focus:outline-none"
             />
             <div className="flex items-center gap-2 px-3 bg-gray-50 border-l border-gray-200">
               <MapPin size={14} className="text-gray-400" />
             </div>
             <input
-              defaultValue={params.location || ""}
+              value={localLocation}
               placeholder="Location"
-              onKeyDown={(e) => { if (e.key === "Enter") updateParams({ location: e.target.value, page: 1 }); }}
+              onChange={(e) => setLocalLocation(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter") updateParams({ location: localLocation, page: 1 }); }}
               className="w-32 px-3 py-2 text-sm focus:outline-none"
             />
           </div>

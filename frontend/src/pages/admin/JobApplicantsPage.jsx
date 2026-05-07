@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { applicationsAPI } from "../api/applicationsAPI";
-import { LoadingPage, EmptyState, StatusBadge, Button, Select } from "../components/ui";
+import { applicationsAPI } from "@/api/applicationsAPI";
+import { LoadingPage, EmptyState, StatusBadge, Button, Select } from "@/components/ui";
 import toast from "react-hot-toast";
 import {
   ArrowLeft, Users, Mail, Phone, MapPin,

@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useReducer, useCallback } from "react";
-import { authAPI } from "../api/authAPI";
+import { authAPI } from "@/api/authAPI";
 import toast from "react-hot-toast";
 const AuthContext = createContext(null);
 const init = { user: JSON.parse(localStorage.getItem("user")) || null, token: localStorage.getItem("token") || null, isLoading: false, isInitialized: false };

@@ -4,11 +4,11 @@ import {
   TrendingUp, ChevronRight, Upload, Loader2,
   CheckCircle2, AlertCircle, Star, Zap, RefreshCw,
 } from "lucide-react";
-import { Button, Card, Textarea, Input } from "../components/ui";
-import { useAuth } from "../context/AuthContext";
+import { Button, Card, Textarea, Input } from "@/components/ui";
+import { useAuth } from "@/context/AuthContext";
 import toast from "react-hot-toast";
 
-const API_URL = import.meta.env.VITE_API_URL?.replace("/api", "") || "http://localhost:5000";
+const API_URL = import.meta.env.VITE_API_URL?.replace("/api", "") || "http://127.0.0.1:5000/api";
 
 // ── Claude API caller ─────────────────────────────────────────────────────
 const callClaude = async (systemPrompt, userMessage, onChunk) => {

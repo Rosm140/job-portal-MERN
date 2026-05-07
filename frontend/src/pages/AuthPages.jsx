@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { Input, Button } from "@/components/ui";
 import { Mail, Lock, Briefcase, ArrowRight, Eye, EyeOff } from "lucide-react";
+import toast from "react-hot-toast";
 
 export const LoginPage = () => {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -27,7 +28,12 @@ export const LoginPage = () => {
     if (Object.keys(errs).length) return setErrors(errs);
     setErrors({});
     const result = await login(form.email, form.password);
-    if (result.success) navigate(from || (result.user.role === "admin" ? "/admin/dashboard" : "/jobs"), { replace: true });
+    if (result.success) {
+      toast.success("Welcome back!");
+      navigate(from || (result.user.role === "admin" ? "/admin/dashboard" : "/jobs"), { replace: true });
+    } else {
+      toast.error(result.message || "Login failed. Please check your credentials.");
+    }
   };
 
   return (
@@ -112,8 +118,14 @@ export const RegisterPage = () => {
     ev.preventDefault();
     const errs = validate();
     if (Object.keys(errs).length) return setErrors(errs);
+    setErrors({});
     const result = await register(form);
-    if (result.success) navigate(result.user.role === "admin" ? "/admin/dashboard" : "/jobs");
+    if (result.success) {
+      toast.success("Account created successfully!");
+      navigate(result.user.role === "admin" ? "/admin/dashboard" : "/jobs");
+    } else {
+      toast.error(result.message || "Registration failed.");
+    }
   };
 
   return (

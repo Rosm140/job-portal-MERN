@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { jobsAPI } from "../api/jobsAPI";
-import { useJobs } from "../hooks/useJobs";
-import { LoadingPage, EmptyState, StatusBadge, Button } from "../components/ui";
+import { jobsAPI } from "@/api/jobsAPI";
+import { useJobs } from "@/hooks/useJobs";
+import { LoadingPage, EmptyState, StatusBadge, Button } from "@/components/ui";
 import toast from "react-hot-toast";
 import {
   Briefcase, PlusCircle, Edit2, Trash2, Eye,

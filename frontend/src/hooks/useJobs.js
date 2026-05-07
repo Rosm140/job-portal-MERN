@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { jobsAPI } from "../api/jobsAPI";
+import { jobsAPI } from "@/api/jobsAPI";
 export const useJobs = (initialParams = {}) => {
   const [jobs, setJobs] = useState([]); const [pagination, setPagination] = useState(null); const [isLoading, setIsLoading] = useState(false); const [params, setParams] = useState({ page: 1, limit: 12, ...initialParams });
   const fetchJobs = useCallback(async (qp = params) => { setIsLoading(true); try { const r = await jobsAPI.getAll(qp); setJobs(r.data.jobs); setPagination(r.data.pagination); } catch {} finally { setIsLoading(false); } }, [JSON.stringify(params)]);
