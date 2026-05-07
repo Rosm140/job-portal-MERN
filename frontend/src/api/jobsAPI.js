@@ -1,11 +1,2 @@
 import api from "./axios";
-
-export const jobsAPI = {
-  getAll: (params) => api.get("/jobs", { params }),
-  getById: (id) => api.get(`/jobs/${id}`),
-  create: (data) => api.post("/jobs", data),
-  update: (id, data) => api.put(`/jobs/${id}`, data),
-  delete: (id) => api.delete(`/jobs/${id}`),
-  getMyJobs: (params) => api.get("/jobs/admin/my-jobs", { params }),
-  toggleStatus: (id, status) => api.patch(`/jobs/${id}/status`, { status }),
-};
+export const jobsAPI = { getAll: (p) => api.get("/jobs", { params: p }), getById: (id) => api.get(`/jobs/${id}`), create: (d) => api.post("/jobs", d), update: (id, d) => api.put(`/jobs/${id}`, d), delete: (id) => api.delete(`/jobs/${id}`), getMyJobs: (p) => api.get("/jobs/admin/my-jobs", { params: p }), toggleStatus: (id, s) => api.patch(`/jobs/${id}/status`, { status: s }) };

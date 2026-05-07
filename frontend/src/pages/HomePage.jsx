@@ -1,118 +1,210 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { ArrowRight, Briefcase, Shield, Zap, Search, Users, TrendingUp } from "lucide-react";
+import {
+  Search, MapPin, Briefcase, TrendingUp, Users,
+  Star, ArrowRight, Sparkles, BookOpen, Building2,
+  ChevronRight, Zap, Shield, Clock,
+} from "lucide-react";
+
+const TRENDING_SKILLS = [
+  "React.js", "Node.js", "Python", "Data Science", "UI/UX Design",
+  "DevOps", "Machine Learning", "Flutter", "Java", "AWS",
+];
+
+const CATEGORIES = [
+  { icon: "💻", label: "Software Dev", count: "12,400+" },
+  { icon: "📊", label: "Data Science", count: "4,200+" },
+  { icon: "🎨", label: "Design", count: "3,800+" },
+  { icon: "📱", label: "Mobile Dev", count: "2,900+" },
+  { icon: "☁️", label: "Cloud / DevOps", count: "3,100+" },
+  { icon: "🤖", label: "AI / ML", count: "2,600+" },
+  { icon: "📈", label: "Marketing", count: "5,400+" },
+  { icon: "🏦", label: "Finance", count: "3,200+" },
+];
+
+const TOP_COMPANIES = [
+  "Google", "Microsoft", "Amazon", "Flipkart", "Infosys",
+  "TCS", "Wipro", "Zomato", "Swiggy", "Razorpay",
+];
 
 const HomePage = () => {
   const { isAuthenticated, isAdmin } = useAuth();
+  const [search, setSearch] = useState("");
+  const [location, setLocation] = useState("");
+  const navigate = useNavigate();
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const params = new URLSearchParams();
+    if (search) params.set("search", search);
+    if (location) params.set("location", location);
+    navigate(`/jobs?${params.toString()}`);
+  };
 
   return (
-    <div className="min-h-screen bg-gray-950 pt-16">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden">
-        {/* Background glows */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-blue-600/8 rounded-full blur-3xl" />
-          <div className="absolute top-20 right-0 w-96 h-96 bg-violet-600/8 rounded-full blur-3xl" />
-          <div className="absolute top-40 left-0 w-80 h-80 bg-blue-500/5 rounded-full blur-3xl" />
-        </div>
+    <div className="min-h-screen bg-slate-50 pt-16">
 
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-24 text-center">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 text-blue-300 text-xs font-medium px-4 py-1.5 rounded-full mb-8">
-            <Zap size={11} className="fill-current" />
-            Industry-level Job Portal — Built for India
+      {/* ── Hero ─────────────────────────────────────────────────── */}
+      <section className="bg-gradient-to-br from-blue-700 via-blue-600 to-blue-800 text-white py-16 px-4">
+        <div className="max-w-5xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5 text-sm mb-6">
+            <Sparkles size={14} className="text-yellow-300" />
+            Now with AI-powered job matching & resume analysis
           </div>
 
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-white leading-[1.08] tracking-tight mb-6">
-            Find Your
-            <span className="relative">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-300 to-violet-400"> Dream Career</span>
-            </span>
-            <br />with Confidence
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-4">
+            Find Your <span className="text-yellow-300">Dream Job</span><br />
+            Faster with AI
           </h1>
-
-          <p className="text-gray-400 text-lg sm:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
-            Connect with top companies. Browse thousands of jobs. Apply in seconds.
-            Your next opportunity is one click away.
+          <p className="text-blue-100 text-lg mb-10 max-w-xl mx-auto">
+            Over 50,000 jobs from top companies. AI-powered matching, resume analysis, and interview prep — all in one place.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            {isAuthenticated ? (
-              <Link
-                to={isAdmin ? "/admin/dashboard" : "/jobs"}
-                className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold px-8 py-4 rounded-2xl transition-all shadow-2xl shadow-blue-500/25 text-sm"
-              >
-                {isAdmin ? "Go to Dashboard" : "Browse Jobs"} <ArrowRight size={16} />
-              </Link>
-            ) : (
-              <>
-                <Link
-                  to="/register"
-                  className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold px-8 py-4 rounded-2xl transition-all shadow-2xl shadow-blue-500/25 text-sm"
-                >
-                  Get Started Free <ArrowRight size={16} />
-                </Link>
-                <Link
-                  to="/jobs"
-                  className="inline-flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 text-gray-200 font-medium px-8 py-4 rounded-2xl transition-all text-sm"
-                >
-                  <Search size={15} /> Browse Jobs
-                </Link>
-              </>
-            )}
-          </div>
+          {/* Search Box (Naukri style) */}
+          <form onSubmit={handleSearch} className="bg-white rounded-2xl p-3 shadow-2xl max-w-3xl mx-auto">
+            <div className="flex flex-col sm:flex-row gap-2">
+              <div className="flex-1 flex items-center gap-2 px-3">
+                <Search size={18} className="text-gray-400 shrink-0" />
+                <input
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Job title, keywords, company..."
+                  className="flex-1 text-gray-800 text-sm py-2 focus:outline-none"
+                />
+              </div>
+              <div className="hidden sm:block w-px bg-gray-200" />
+              <div className="flex-1 flex items-center gap-2 px-3">
+                <MapPin size={18} className="text-gray-400 shrink-0" />
+                <input
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  placeholder="City, state, or remote"
+                  className="flex-1 text-gray-800 text-sm py-2 focus:outline-none"
+                />
+              </div>
+              <button type="submit"
+                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3 rounded-xl transition-colors text-sm">
+                Search Jobs
+              </button>
+            </div>
 
-          {/* Stats */}
-          <div className="flex flex-wrap items-center justify-center gap-8 mt-16 pt-12 border-t border-white/[0.06]">
-            {[
-              { value: "10,000+", label: "Active Jobs" },
-              { value: "5,000+", label: "Companies" },
-              { value: "50,000+", label: "Job Seekers" },
-              { value: "98%", label: "Success Rate" },
-            ].map(({ value, label }) => (
-              <div key={label} className="text-center">
-                <p className="text-2xl font-bold text-white">{value}</p>
-                <p className="text-xs text-gray-500 mt-0.5">{label}</p>
+            {/* Trending Skills */}
+            <div className="flex flex-wrap gap-2 mt-3 px-1">
+              <span className="text-xs text-gray-400">Trending:</span>
+              {TRENDING_SKILLS.slice(0, 6).map((skill) => (
+                <button key={skill} type="button"
+                  onClick={() => { setSearch(skill); }}
+                  className="text-xs text-blue-600 hover:text-blue-800 hover:underline transition-colors">
+                  {skill}
+                </button>
+              ))}
+            </div>
+          </form>
+
+          {/* Stats row */}
+          <div className="flex flex-wrap justify-center gap-8 mt-10 text-center">
+            {[["50,000+", "Active Jobs"], ["10,000+", "Companies"], ["2M+", "Job Seekers"], ["95%", "Placement Rate"]].map(([v, l]) => (
+              <div key={l}>
+                <p className="text-2xl font-bold text-yellow-300">{v}</p>
+                <p className="text-blue-200 text-xs mt-0.5">{l}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-20">
-        <div className="text-center mb-14">
-          <h2 className="text-3xl font-bold text-white mb-3">Everything you need to land your next job</h2>
-          <p className="text-gray-400 max-w-xl mx-auto">A complete platform for job seekers and employers to connect efficiently.</p>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {FEATURES.map(({ icon, title, desc, color }) => (
-            <div key={title} className="bg-gray-900 border border-white/[0.07] rounded-2xl p-6 hover:border-white/10 transition-all group">
-              <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${color} flex items-center justify-center mb-4 text-white`}>
-                {icon}
+      {/* ── AI Banner ─────────────────────────────────────────────── */}
+      {isAuthenticated && !isAdmin && (
+        <section className="bg-gradient-to-r from-violet-600 to-purple-700 text-white py-4 px-4">
+          <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                <Sparkles size={20} className="text-yellow-300" />
               </div>
-              <h3 className="text-white font-semibold mb-2">{title}</h3>
-              <p className="text-gray-500 text-sm leading-relaxed">{desc}</p>
+              <div>
+                <p className="font-semibold text-sm">Your AI Career Assistant is ready!</p>
+                <p className="text-violet-200 text-xs">Analyze resume, generate cover letters, prep for interviews</p>
+              </div>
             </div>
+            <Link to="/student/ai-tools"
+              className="shrink-0 flex items-center gap-2 bg-white text-violet-700 font-semibold px-5 py-2.5 rounded-xl text-sm hover:bg-violet-50 transition-colors">
+              Try AI Tools <ArrowRight size={14} />
+            </Link>
+          </div>
+        </section>
+      )}
+
+      {/* ── Browse by Category ────────────────────────────────────── */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-bold text-gray-900">Browse by Category</h2>
+          <Link to="/jobs" className="text-sm text-blue-600 hover:underline flex items-center gap-1">
+            All categories <ChevronRight size={14} />
+          </Link>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
+          {CATEGORIES.map(({ icon, label, count }) => (
+            <Link key={label} to={`/jobs?search=${encodeURIComponent(label)}`}
+              className="bg-white border border-gray-200 rounded-xl p-4 text-center hover:border-blue-300 hover:shadow-card-hover transition-all group cursor-pointer">
+              <div className="text-2xl mb-2">{icon}</div>
+              <p className="text-xs font-semibold text-gray-800 group-hover:text-blue-600 transition-colors leading-tight">{label}</p>
+              <p className="text-[10px] text-gray-400 mt-1">{count} jobs</p>
+            </Link>
           ))}
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* ── Why Choose Us ─────────────────────────────────────────── */}
+      <section className="bg-white border-y border-gray-200 py-12 px-4">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-xl font-bold text-gray-900 text-center mb-8">Why job seekers love JobPortal</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            {[
+              { icon: <Sparkles size={22} className="text-violet-600" />, bg: "bg-violet-50", title: "AI-Powered Matching", desc: "Our AI scores your profile against every job and tells you exactly why you're a fit." },
+              { icon: <Zap size={22} className="text-blue-600" />, bg: "bg-blue-50", title: "One-Click Apply", desc: "Apply to any job in seconds using your saved profile. No re-entering details." },
+              { icon: <Shield size={22} className="text-green-600" />, bg: "bg-green-50", title: "Verified Companies", desc: "Every employer is manually verified. No fake job postings, ever." },
+            ].map(({ icon, bg, title, desc }) => (
+              <div key={title} className="flex gap-4 p-5 rounded-2xl border border-gray-100 hover:shadow-card transition-all">
+                <div className={`w-12 h-12 ${bg} rounded-xl flex items-center justify-center shrink-0`}>{icon}</div>
+                <div>
+                  <p className="font-semibold text-gray-900 mb-1">{title}</p>
+                  <p className="text-sm text-gray-500 leading-relaxed">{desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Top Companies ─────────────────────────────────────────── */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
+        <h2 className="text-xl font-bold text-gray-900 text-center mb-6">Top Hiring Companies</h2>
+        <div className="flex flex-wrap justify-center gap-3">
+          {TOP_COMPANIES.map((company) => (
+            <Link key={company} to={`/jobs?search=${encodeURIComponent(company)}`}
+              className="flex items-center gap-2.5 bg-white border border-gray-200 hover:border-blue-300 rounded-xl px-5 py-3 transition-all hover:shadow-card group">
+              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white text-xs font-bold">
+                {company[0]}
+              </div>
+              <span className="text-sm font-medium text-gray-700 group-hover:text-blue-600 transition-colors">{company}</span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* ── CTA ───────────────────────────────────────────────────── */}
       {!isAuthenticated && (
-        <section className="max-w-4xl mx-auto px-4 sm:px-6 py-20">
-          <div className="bg-gradient-to-br from-blue-600/20 via-blue-600/10 to-violet-600/20 border border-blue-500/20 rounded-3xl p-12 text-center">
-            <h2 className="text-3xl font-bold text-white mb-4">Ready to start your journey?</h2>
-            <p className="text-gray-400 mb-8 max-w-lg mx-auto">
-              Join thousands of professionals already using JobPortal to advance their careers.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link to="/register" className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold px-8 py-3.5 rounded-xl transition-all text-sm shadow-lg shadow-blue-500/25">
-                Create Free Account <ArrowRight size={15} />
+        <section className="bg-blue-600 text-white py-14 px-4">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-3xl font-bold mb-3">Ready to land your dream job?</h2>
+            <p className="text-blue-100 mb-8">Join 2 million+ professionals. Free forever for job seekers.</p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Link to="/register" className="bg-white text-blue-700 font-semibold px-8 py-3.5 rounded-xl hover:bg-blue-50 transition-colors text-sm">
+                Create Free Account
               </Link>
-              <Link to="/register?role=admin" className="text-sm text-gray-400 hover:text-white transition-colors underline underline-offset-4">
-                Post jobs as Employer →
+              <Link to="/register?role=admin" className="border border-white/40 text-white font-medium px-8 py-3.5 rounded-xl hover:bg-white/10 transition-colors text-sm">
+                Post Jobs as Employer
               </Link>
             </div>
           </div>
@@ -120,28 +212,25 @@ const HomePage = () => {
       )}
 
       {/* Footer */}
-      <footer className="border-t border-white/[0.06] py-8 mt-4">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <footer className="bg-white border-t border-gray-200 py-8 px-4">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 bg-gradient-to-br from-blue-500 to-violet-600 rounded-lg flex items-center justify-center">
+            <div className="w-6 h-6 bg-blue-600 rounded-md flex items-center justify-center">
               <Briefcase size={12} className="text-white" />
             </div>
-            <span className="text-sm font-semibold text-white">Job<span className="text-blue-400">Portal</span></span>
+            <span className="text-sm font-bold text-gray-900">Job<span className="text-blue-600">Portal</span></span>
           </div>
-          <p className="text-xs text-gray-600">© 2025 JobPortal. Built with React + Node.js + MongoDB.</p>
+          <div className="flex gap-6 text-xs text-gray-400">
+            <Link to="/jobs" className="hover:text-blue-600">Find Jobs</Link>
+            <Link to="/register?role=admin" className="hover:text-blue-600">For Employers</Link>
+            <a href="#" className="hover:text-blue-600">Privacy Policy</a>
+            <a href="#" className="hover:text-blue-600">Terms</a>
+          </div>
+          <p className="text-xs text-gray-400">© 2025 JobPortal. All rights reserved.</p>
         </div>
       </footer>
     </div>
   );
 };
-
-const FEATURES = [
-  { icon: <Search size={18} />, title: "Smart Job Search", desc: "Filter by role, location, salary, skills, and work mode to find the perfect match.", color: "from-blue-500 to-blue-600" },
-  { icon: <Shield size={18} />, title: "Secure Authentication", desc: "JWT-based login with role separation for students and admin users.", color: "from-violet-500 to-violet-600" },
-  { icon: <Briefcase size={18} />, title: "Apply in Seconds", desc: "One-click apply using your saved profile resume with optional cover letter.", color: "from-emerald-500 to-emerald-600" },
-  { icon: <TrendingUp size={18} />, title: "Track Applications", desc: "Real-time status updates from pending to shortlisted, interviewed, and offered.", color: "from-orange-500 to-orange-600" },
-  { icon: <Users size={18} />, title: "Admin Dashboard", desc: "Full CMS for companies — post jobs, review applicants, update statuses.", color: "from-pink-500 to-pink-600" },
-  { icon: <Zap size={18} />, title: "Resume Upload", desc: "Upload your resume once, use it across all applications instantly.", color: "from-yellow-500 to-yellow-600" },
-];
 
 export default HomePage;
