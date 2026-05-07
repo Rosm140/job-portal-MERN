@@ -8,23 +8,22 @@ import { Button, Card, Textarea, Input } from "@/components/ui";
 import { useAuth } from "@/context/AuthContext";
 import toast from "react-hot-toast";
 
-const API_URL = import.meta.env.VITE_API_URL?.replace("/api", "") || "http://127.0.0.1:5000/api";
+// Ensure consistency: VITE_API_URL should always include /api. 
+const API_URL = "/api";
 
 // ── Claude API caller ─────────────────────────────────────────────────────
 const callClaude = async (systemPrompt, userMessage, onChunk) => {
-  const res = await fetch("https://api.anthropic.com/v1/messages", {
+  const res = await fetch(`${API_URL}/ai/claude`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      model: "claude-sonnet-4-20250514",
-      max_tokens: 1000,
       system: systemPrompt,
-      messages: [{ role: "user", content: userMessage }],
+      prompt: userMessage,
     }),
   });
   if (!res.ok) throw new Error("AI request failed");
   const data = await res.json();
-  return data.content?.[0]?.text || "";
+  return data.data?.text || data.text || "";
 };
 
 // ── Tool definitions ──────────────────────────────────────────────────────
