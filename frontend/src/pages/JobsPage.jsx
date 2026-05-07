@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { useJobs } from "../../hooks/useJobs";
-import JobCard from "../../components/jobs/JobCard";
-import { LoadingPage, EmptyState, Button } from "../../components/ui";
+import { useJobs } from "@/hooks/useJobs";
+import JobCard from "@/components/jobs/JobCard";
+import { LoadingPage, EmptyState, Button } from "@/components/ui";
 import { Briefcase, ChevronLeft, ChevronRight, SlidersHorizontal, X, Search, MapPin } from "lucide-react";
 import { useState } from "react";
-import { applicationsAPI } from "../../api/applicationsAPI";
-import { useAuth } from "../../context/AuthContext";
+import { applicationsAPI } from "@/api/applicationsAPI";
+import { useAuth } from "@/context/AuthContext";
 import toast from "react-hot-toast";
 
 const JOB_TYPES   = ["full-time", "part-time", "contract", "internship", "freelance"];

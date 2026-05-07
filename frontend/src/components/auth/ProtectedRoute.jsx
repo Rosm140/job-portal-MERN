@@ -1,5 +1,5 @@
 import { Navigate, useLocation } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../context/AuthContext";
 const Loader = () => <div className="min-h-screen flex items-center justify-center bg-slate-50"><div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"/></div>;
 export const ProtectedRoute = ({ children }) => { const { isAuthenticated, isInitialized } = useAuth(); const location = useLocation(); if (!isInitialized) return <Loader/>; if (!isAuthenticated) return <Navigate to="/login" state={{ from: location }} replace />; return children; };
 export const PublicRoute = ({ children }) => { const { isAuthenticated, isAdmin, isInitialized } = useAuth(); if (!isInitialized) return null; if (isAuthenticated) return <Navigate to={isAdmin ? "/admin/dashboard" : "/jobs"} replace />; return children; };

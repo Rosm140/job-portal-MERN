@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
-import { Input, Button } from "../../components/ui";
+import { useAuth } from "@/context/AuthContext";
+import { Input, Button } from "@/components/ui";
 import { Mail, Lock, Briefcase, ArrowRight, Eye, EyeOff } from "lucide-react";
 
 export const LoginPage = () => {

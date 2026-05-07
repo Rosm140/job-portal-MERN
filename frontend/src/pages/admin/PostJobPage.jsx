@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { jobsAPI } from "../../api/jobsAPI";
-import { useAuth } from "../../context/AuthContext";
-import { Input, Textarea, Select, Button } from "../../components/ui";
+import { jobsAPI } from "../api/jobsAPI";
+import { useAuth } from "../context/AuthContext";
+import { Input, Textarea, Select, Button } from "../components/ui";
 import toast from "react-hot-toast";
 import { X, Plus, Briefcase } from "lucide-react";
 

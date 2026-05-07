@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { useAuth } from "../../context/AuthContext";
-import { userAPI } from "../../api/userAPI";
-import { Input, Textarea, Button, Card } from "../../components/ui";
+import { useAuth } from "../context/AuthContext";
+import { userAPI } from "../api/userAPI";
+import { Input, Textarea, Button, Card } from "../components/ui";
 import toast from "react-hot-toast";
 import {
   User, Phone, MapPin, FileText, Upload, Trash2,

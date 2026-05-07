@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { useJob } from "../../hooks/useJobs";
-import { useAuth } from "../../context/AuthContext";
-import { applicationsAPI } from "../../api/applicationsAPI";
-import { LoadingPage, Button, Textarea, StatusBadge } from "../../components/ui";
+import { useJob } from "@/hooks/useJobs";
+import { useAuth } from "@/context/AuthContext";
+import { applicationsAPI } from "@/api/applicationsAPI";
+import { LoadingPage, Button, Textarea, StatusBadge } from "@/components/ui";
 import toast from "react-hot-toast";
 import {
   MapPin, Briefcase, Banknote, Users, Globe, Wifi,

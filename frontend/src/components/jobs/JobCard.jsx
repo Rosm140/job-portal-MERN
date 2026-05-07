@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { MapPin, Clock, Banknote, Bookmark, BookmarkCheck, Zap, ExternalLink, Users, Wifi } from "lucide-react";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../context/AuthContext";
 
 const JOB_TYPE_COLORS = {
   "full-time":  "bg-green-50 text-green-700 border-green-200",
