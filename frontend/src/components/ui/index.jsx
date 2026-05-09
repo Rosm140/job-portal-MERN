@@ -1,4 +1,4 @@
-// ── Spinner ────────────────────────────────────────────────────────────
+// ── Spinner ────────────────────────────────────────────────────────────────────
 export const Spinner = ({ size = "md", className = "" }) => {
   const s = { sm: "w-4 h-4 border-2", md: "w-7 h-7 border-2", lg: "w-10 h-10 border-2" };
   return <div className={`${s[size]} border-blue-600 border-t-transparent rounded-full animate-spin ${className}`} />;
@@ -11,7 +11,7 @@ export const LoadingPage = ({ message = "Loading..." }) => (
   </div>
 );
 
-// ── Input ───────────────────────────────────────────────────────────────
+// ── Input ──────────────────────────────────────────────────────────────────────
 export const Input = ({ label, error, icon, className = "", ...props }) => (
   <div className={`space-y-1.5 ${className}`}>
     {label && <label className="block text-xs font-semibold text-gray-700">{label}</label>}
@@ -21,7 +21,9 @@ export const Input = ({ label, error, icon, className = "", ...props }) => (
         className={`w-full border rounded-lg py-2.5 text-sm text-gray-900 placeholder:text-gray-400
           focus:outline-none focus:ring-2 transition-all bg-white
           ${icon ? "pl-9 pr-4" : "px-3.5"}
-          ${error ? "border-red-400 focus:border-red-400 focus:ring-red-100" : "border-gray-300 focus:border-blue-500 focus:ring-blue-100"}`}
+          ${error
+            ? "border-red-400 focus:border-red-400 focus:ring-red-100"
+            : "border-gray-300 focus:border-blue-500 focus:ring-blue-100"}`}
         {...props}
       />
     </div>
@@ -29,28 +31,32 @@ export const Input = ({ label, error, icon, className = "", ...props }) => (
   </div>
 );
 
-// ── Textarea ─────────────────────────────────────────────────────────────
+// ── Textarea ───────────────────────────────────────────────────────────────────
 export const Textarea = ({ label, error, className = "", ...props }) => (
   <div className={`space-y-1.5 ${className}`}>
     {label && <label className="block text-xs font-semibold text-gray-700">{label}</label>}
     <textarea
       className={`w-full border rounded-lg px-3.5 py-2.5 text-sm text-gray-900 placeholder:text-gray-400
         focus:outline-none focus:ring-2 transition-all resize-none bg-white
-        ${error ? "border-red-400 focus:ring-red-100" : "border-gray-300 focus:border-blue-500 focus:ring-blue-100"}`}
+        ${error
+          ? "border-red-400 focus:ring-red-100"
+          : "border-gray-300 focus:border-blue-500 focus:ring-blue-100"}`}
       {...props}
     />
     {error && <p className="text-xs text-red-500">{error}</p>}
   </div>
 );
 
-// ── Select ──────────────────────────────────────────────────────────────
+// ── Select ─────────────────────────────────────────────────────────────────────
 export const Select = ({ label, error, options = [], className = "", ...props }) => (
   <div className={`space-y-1.5 ${className}`}>
     {label && <label className="block text-xs font-semibold text-gray-700">{label}</label>}
     <select
       className={`w-full border rounded-lg px-3.5 py-2.5 text-sm text-gray-900
         focus:outline-none focus:ring-2 transition-all bg-white
-        ${error ? "border-red-400 focus:ring-red-100" : "border-gray-300 focus:border-blue-500 focus:ring-blue-100"}`}
+        ${error
+          ? "border-red-400 focus:ring-red-100"
+          : "border-gray-300 focus:border-blue-500 focus:ring-blue-100"}`}
       {...props}
     >
       {options.map(({ value, label }) => (
@@ -61,7 +67,7 @@ export const Select = ({ label, error, options = [], className = "", ...props })
   </div>
 );
 
-// ── Button ──────────────────────────────────────────────────────────────
+// ── Button ─────────────────────────────────────────────────────────────────────
 export const Button = ({
   children, variant = "primary", size = "md",
   isLoading = false, className = "", disabled, ...props
@@ -83,37 +89,52 @@ export const Button = ({
     xl: "text-base px-8 py-3.5",
   };
   return (
-    <button className={`${base} ${variants[variant]} ${sizes[size]} ${className}`} disabled={disabled || isLoading} {...props}>
+    <button
+      className={`${base} ${variants[variant]} ${sizes[size]} ${className}`}
+      disabled={disabled || isLoading}
+      {...props}
+    >
       {isLoading && <Spinner size="sm" />}
       {children}
     </button>
   );
 };
 
-// ── StatusBadge ──────────────────────────────────────────────────────────
-const BADGE = {
-  pending:     "bg-yellow-50 text-yellow-700 border-yellow-200",
-  reviewed:    "bg-blue-50 text-blue-700 border-blue-200",
-  shortlisted: "bg-violet-50 text-violet-700 border-violet-200",
-  interviewed: "bg-orange-50 text-orange-700 border-orange-200",
-  offered:     "bg-green-50 text-green-700 border-green-200",
-  rejected:    "bg-red-50 text-red-600 border-red-200",
-  withdrawn:   "bg-gray-100 text-gray-500 border-gray-200",
-  active:      "bg-green-50 text-green-700 border-green-200",
-  closed:      "bg-red-50 text-red-600 border-red-200",
-  draft:       "bg-gray-100 text-gray-500 border-gray-200",
-  "full-time": "bg-green-50 text-green-700 border-green-200",
-  "part-time": "bg-yellow-50 text-yellow-700 border-yellow-200",
-  "contract":  "bg-orange-50 text-orange-700 border-orange-200",
-  "internship":"bg-blue-50 text-blue-700 border-blue-200",
+// ── StatusBadge ────────────────────────────────────────────────────────────────
+const BADGE_STYLES = {
+  pending:      "bg-yellow-50 text-yellow-700 border-yellow-200",
+  reviewed:     "bg-blue-50 text-blue-700 border-blue-200",
+  shortlisted:  "bg-violet-50 text-violet-700 border-violet-200",
+  interviewed:  "bg-orange-50 text-orange-700 border-orange-200",
+  offered:      "bg-green-50 text-green-700 border-green-200",
+  rejected:     "bg-red-50 text-red-600 border-red-200",
+  withdrawn:    "bg-gray-100 text-gray-500 border-gray-200",
+  active:       "bg-green-50 text-green-700 border-green-200",
+  closed:       "bg-red-50 text-red-600 border-red-200",
+  draft:        "bg-gray-100 text-gray-500 border-gray-200",
+  "full-time":  "bg-green-50 text-green-700 border-green-200",
+  "part-time":  "bg-yellow-50 text-yellow-700 border-yellow-200",
+  "contract":   "bg-orange-50 text-orange-700 border-orange-200",
+  "internship": "bg-blue-50 text-blue-700 border-blue-200",
+  "freelance":  "bg-purple-50 text-purple-700 border-purple-200",
+  "remote":     "bg-sky-50 text-sky-700 border-sky-200",
+  "hybrid":     "bg-teal-50 text-teal-700 border-teal-200",
+  "onsite":     "bg-gray-50 text-gray-600 border-gray-200",
+  "fresher":    "bg-lime-50 text-lime-700 border-lime-200",
+  "junior":     "bg-cyan-50 text-cyan-700 border-cyan-200",
+  "mid":        "bg-indigo-50 text-indigo-700 border-indigo-200",
+  "senior":     "bg-violet-50 text-violet-700 border-violet-200",
+  "lead":       "bg-pink-50 text-pink-700 border-pink-200",
 };
+
 export const StatusBadge = ({ status }) => (
-  <span className={`inline-flex items-center text-[11px] font-semibold px-2 py-0.5 rounded border capitalize ${BADGE[status] || "bg-gray-100 text-gray-600 border-gray-200"}`}>
+  <span className={`inline-flex items-center text-[11px] font-semibold px-2 py-0.5 rounded border capitalize
+    ${BADGE_STYLES[status] || "bg-gray-100 text-gray-600 border-gray-200"}`}>
     {status}
   </span>
 );
 
-// ── EmptyState ───────────────────────────────────────────────────────────
+// ── EmptyState ─────────────────────────────────────────────────────────────────
 export const EmptyState = ({ icon, title, description, action }) => (
   <div className="flex flex-col items-center justify-center py-20 text-center">
     <div className="w-16 h-16 rounded-2xl bg-gray-100 border border-gray-200 flex items-center justify-center mb-4 text-gray-400">{icon}</div>
@@ -123,7 +144,7 @@ export const EmptyState = ({ icon, title, description, action }) => (
   </div>
 );
 
-// ── StatCard ─────────────────────────────────────────────────────────────
+// ── StatCard ───────────────────────────────────────────────────────────────────
 export const StatCard = ({ icon, label, value, color = "blue", trend }) => {
   const colors = {
     blue:   "bg-blue-50 border-blue-100 text-blue-600",
@@ -145,18 +166,7 @@ export const StatCard = ({ icon, label, value, color = "blue", trend }) => {
   );
 };
 
-// ── PageHeader ──────────────────────────────────────────────────────────
-export const PageHeader = ({ title, subtitle, action }) => (
-  <div className="flex items-start justify-between mb-6">
-    <div>
-      <h1 className="text-2xl font-bold text-gray-900">{title}</h1>
-      {subtitle && <p className="text-gray-500 text-sm mt-0.5">{subtitle}</p>}
-    </div>
-    {action}
-  </div>
-);
-
-// ── Card ──────────────────────────────────────────────────────────────────
+// ── Card ───────────────────────────────────────────────────────────────────────
 export const Card = ({ children, className = "", padding = true }) => (
   <div className={`bg-white border border-gray-200 rounded-xl shadow-sm ${padding ? "p-6" : ""} ${className}`}>
     {children}

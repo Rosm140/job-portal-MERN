@@ -1,15 +1,14 @@
 import { useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { useJob } from "@/hooks/useJobs";
-import { useAuth } from "@/context/AuthContext";
-import { applicationsAPI } from "@/api/applicationsAPI";
-import { LoadingPage, Button, Textarea, StatusBadge } from "@/components/ui";
+import { useJob } from "../hooks/useJobs";
+import { useAuth } from "../context/AuthContext";
+import { applicationsAPI } from "../api/applicationsAPI";
+import { LoadingPage, Button, Textarea, StatusBadge } from "../components/ui";
 import toast from "react-hot-toast";
 import {
   MapPin, Briefcase, Banknote, Users, Globe, Wifi,
-  CheckCircle2, ArrowLeft, Send, Upload, Building2,
-  Clock, Bookmark, BookmarkCheck, Share2, Zap, Star,
-  ChevronRight,
+  CheckCircle2, ArrowLeft, Send, Upload, Clock,
+  Bookmark, BookmarkCheck, Share2, Zap, ChevronRight,
 } from "lucide-react";
 
 const calcMatchScore = (jobSkills = [], userSkills = []) => {
@@ -23,24 +22,25 @@ const timeAgo = (date) => {
   const d = Math.floor((Date.now() - new Date(date)) / 86400000);
   if (d === 0) return "Posted today";
   if (d === 1) return "Posted yesterday";
-  if (d < 7) return `Posted ${d} days ago`;
+  if (d < 7)  return `Posted ${d} days ago`;
   return `Posted ${Math.floor(d / 7)} weeks ago`;
 };
 
 const JobDetailPage = () => {
-  const { id } = useParams();
+  const { id }    = useParams();
   const { job, hasApplied, isLoading } = useJob(id);
   const { isAuthenticated, isStudent, user } = useAuth();
-  const navigate = useNavigate();
-  const [showModal, setShowModal] = useState(false);
-  const [applying, setApplying] = useState(false);
+  const navigate  = useNavigate();
+
+  const [showModal,   setShowModal]   = useState(false);
+  const [applying,    setApplying]    = useState(false);
   const [coverLetter, setCoverLetter] = useState("");
-  const [resumeFile, setResumeFile] = useState(null);
-  const [bookmarked, setBookmarked] = useState(() => {
+  const [resumeFile,  setResumeFile]  = useState(null);
+  const [bookmarked,  setBookmarked]  = useState(() => {
     try { return JSON.parse(localStorage.getItem("bookmarks") || "[]").includes(id); } catch { return false; }
   });
 
-  if (isLoading) return <LoadingPage message="Loading job..." />;
+  if (isLoading) return <LoadingPage message="Loading job details..." />;
   if (!job) return (
     <div className="min-h-screen bg-slate-50 pt-24 flex flex-col items-center justify-center">
       <p className="text-xl font-semibold text-gray-700">Job not found</p>
@@ -49,17 +49,20 @@ const JobDetailPage = () => {
   );
 
   const matchData = calcMatchScore(job.skills, user?.skills);
+
   const salary = (() => {
     const s = job.salary;
     if (!s || !s.isVisible || (!s.min && !s.max)) return "Not disclosed";
     const f = (n) => `₹${(n / 100000).toFixed(1)}L`;
     if (s.min && s.max) return `${f(s.min)} – ${f(s.max)} / year`;
-    return f(s.max || s.min) + " / year";
+    return `${f(s.max || s.min)} / year`;
   })();
 
   const handleBookmark = () => {
-    const stored = JSON.parse(localStorage.getItem("bookmarks") || "[]");
-    const updated = bookmarked ? stored.filter((x) => x !== id) : [...stored, id];
+    const stored  = JSON.parse(localStorage.getItem("bookmarks") || "[]");
+    const updated = bookmarked
+      ? stored.filter((x) => x !== id)
+      : [...stored, id];
     localStorage.setItem("bookmarks", JSON.stringify(updated));
     setBookmarked(!bookmarked);
     toast.success(bookmarked ? "Removed from saved" : "Job saved!");
@@ -67,7 +70,7 @@ const JobDetailPage = () => {
 
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);
-    toast.success("Link copied!");
+    toast.success("Link copied to clipboard!");
   };
 
   const handleApply = async (e) => {
@@ -79,7 +82,7 @@ const JobDetailPage = () => {
       setShowModal(false);
       navigate("/student/applications");
     } catch (err) {
-      toast.error(err.response?.data?.message || "Failed to apply.");
+      toast.error(err.response?.data?.message || "Failed to apply. Please try again.");
     } finally {
       setApplying(false);
     }
@@ -98,10 +101,10 @@ const JobDetailPage = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-          {/* ── Left / Main ─────────────────────────────────────────── */}
+          {/* ── Main Column ──────────────────────────────────────────── */}
           <div className="lg:col-span-2 space-y-5">
 
-            {/* Header card */}
+            {/* Header Card */}
             <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
               <div className="flex items-start gap-4">
                 <div className="w-16 h-16 bg-blue-50 border border-blue-100 rounded-2xl flex items-center justify-center text-blue-700 font-bold text-xl shrink-0">
@@ -123,7 +126,7 @@ const JobDetailPage = () => {
                         <span className="text-xs text-gray-400">{timeAgo(job.createdAt)}</span>
                       </div>
                     </div>
-                    <div className="flex items-center gap-1.5 shrink-0">
+                    <div className="flex items-center gap-1 shrink-0">
                       <button onClick={handleShare}
                         className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                         title="Copy link">
@@ -146,18 +149,20 @@ const JobDetailPage = () => {
                         : "bg-red-50 text-red-600 border-red-200"}`}>
                       <Zap size={11} className="fill-current" />
                       {matchData.score}% profile match
-                      <span className="font-normal text-gray-400">({matchData.matched.length}/{job.skills.length} skills)</span>
+                      <span className="font-normal text-gray-400">
+                        ({matchData.matched.length}/{job.skills.length} skills)
+                      </span>
                     </div>
                   )}
                 </div>
               </div>
 
-              {/* Meta grid */}
+              {/* Meta Grid */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-5 pt-5 border-t border-gray-100">
-                <MetaItem icon={<MapPin size={14} className="text-gray-400" />} label="Location" value={job.location} />
-                <MetaItem icon={<Briefcase size={14} className="text-gray-400" />} label="Job Type" value={job.jobType} />
-                <MetaItem icon={<Banknote size={14} className="text-gray-400" />} label="Salary" value={salary} highlight />
-                <MetaItem icon={<Users size={14} className="text-gray-400" />} label="Openings" value={`${job.openings || 1} position${(job.openings || 1) > 1 ? "s" : ""}`} />
+                <MetaItem icon={<MapPin size={13} className="text-gray-400" />}      label="Location"   value={job.location} />
+                <MetaItem icon={<Briefcase size={13} className="text-gray-400" />}   label="Job Type"   value={job.jobType} />
+                <MetaItem icon={<Banknote size={13} className="text-gray-400" />}    label="Salary"     value={salary} highlight />
+                <MetaItem icon={<Users size={13} className="text-gray-400" />}       label="Openings"   value={`${job.openings || 1} position${(job.openings || 1) > 1 ? "s" : ""}`} />
               </div>
 
               <div className="flex flex-wrap gap-2 mt-4">
@@ -203,15 +208,14 @@ const JobDetailPage = () => {
               </Section>
             )}
 
-            {/* About Company */}
             {job.company?.description && (
               <Section title="About the Company">
                 <div className="flex gap-4">
-                  <div className="w-12 h-12 bg-gray-100 border border-gray-200 rounded-xl flex items-center justify-center text-gray-500 font-bold shrink-0">
+                  <div className="w-12 h-12 bg-gray-100 border border-gray-200 rounded-xl flex items-center justify-center text-gray-600 font-bold shrink-0">
                     {job.company.name?.[0]}
                   </div>
                   <div>
-                    <p className="font-semibold text-gray-900 mb-1">{job.company.name}</p>
+                    <p className="font-semibold text-gray-900 mb-1 text-sm">{job.company.name}</p>
                     <p className="text-sm text-gray-600 leading-relaxed">{job.company.description}</p>
                   </div>
                 </div>
@@ -219,19 +223,18 @@ const JobDetailPage = () => {
             )}
           </div>
 
-          {/* ── Right / Sidebar ──────────────────────────────────────── */}
+          {/* ── Sidebar ──────────────────────────────────────────────── */}
           <div className="space-y-4">
 
             {/* Apply Card */}
             <div className="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm sticky top-24">
-              <div className="flex items-center gap-2 mb-4 pb-4 border-b border-gray-100">
-                <Users size={14} className="text-gray-400" />
-                <span className="text-sm text-gray-500">{job.applicantsCount || 0} applicants</span>
+              <div className="flex items-center gap-2 mb-4 pb-4 border-b border-gray-100 text-xs text-gray-400">
+                <Users size={13} />{job.applicantsCount || 0} applicants
                 {job.deadline && (
                   <>
-                    <span className="text-gray-200">·</span>
-                    <Clock size={14} className="text-gray-400" />
-                    <span className="text-xs text-red-500 font-medium">
+                    <span className="text-gray-200 mx-1">·</span>
+                    <Clock size={13} />
+                    <span className="text-red-500 font-medium">
                       Closes {new Date(job.deadline).toLocaleDateString("en-IN", { day: "numeric", month: "short" })}
                     </span>
                   </>
@@ -245,26 +248,29 @@ const JobDetailPage = () => {
               ) : isStudent ? (
                 hasApplied ? (
                   <div className="flex items-center gap-2 bg-green-50 border border-green-200 text-green-700 rounded-xl px-4 py-3 text-sm font-semibold">
-                    <CheckCircle2 size={16} />
-                    Application Submitted
+                    <CheckCircle2 size={16} /> Application Submitted
                   </div>
                 ) : job.status === "active" ? (
                   <Button onClick={() => setShowModal(true)} size="lg" className="w-full">
                     <Send size={15} /> Apply Now
                   </Button>
                 ) : (
-                  <p className="text-sm text-center text-gray-400 py-2">This job is no longer accepting applications.</p>
+                  <p className="text-sm text-center text-gray-400 py-2">
+                    This job is no longer accepting applications.
+                  </p>
                 )
               ) : null}
 
               {isStudent && !hasApplied && job.status === "active" && (
                 <Button variant="secondary" size="md" className="w-full mt-2" onClick={handleBookmark}>
-                  {bookmarked ? <><BookmarkCheck size={14} /> Saved</> : <><Bookmark size={14} /> Save for Later</>}
+                  {bookmarked
+                    ? <><BookmarkCheck size={14} /> Saved</>
+                    : <><Bookmark size={14} /> Save for Later</>}
                 </Button>
               )}
             </div>
 
-            {/* Skills Match */}
+            {/* Skills */}
             {job.skills?.length > 0 && (
               <div className="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm">
                 <h3 className="text-sm font-bold text-gray-900 mb-3">Required Skills</h3>
@@ -273,8 +279,10 @@ const JobDetailPage = () => {
                     const isMatch = user?.skills?.some((s) => s.toLowerCase() === skill.toLowerCase());
                     return (
                       <span key={skill}
-                        className={`text-xs font-medium px-2.5 py-1 rounded-full border transition-all
-                          ${isMatch ? "bg-green-50 text-green-700 border-green-200" : "bg-gray-50 text-gray-600 border-gray-200"}`}>
+                        className={`text-xs font-medium px-2.5 py-1 rounded-full border
+                          ${isMatch
+                            ? "bg-green-50 text-green-700 border-green-200"
+                            : "bg-gray-50 text-gray-600 border-gray-200"}`}>
                         {isMatch && <CheckCircle2 size={10} className="inline mr-1" />}
                         {skill}
                       </span>
@@ -283,7 +291,9 @@ const JobDetailPage = () => {
                 </div>
                 {isStudent && (
                   <p className="text-xs text-gray-400 mt-3">
-                    {matchData ? `You match ${matchData.matched.length} of ${job.skills.length} skills` : "Add skills to your profile to see match"}
+                    {matchData
+                      ? `You match ${matchData.matched.length} of ${job.skills.length} skills`
+                      : "Add skills to your profile to see your match"}
                   </p>
                 )}
               </div>
@@ -292,24 +302,19 @@ const JobDetailPage = () => {
             {/* Job Summary */}
             <div className="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm">
               <h3 className="text-sm font-bold text-gray-900 mb-3">Job Summary</h3>
-              <div className="space-y-3 text-xs text-gray-500">
-                <div className="flex justify-between">
-                  <span>Published</span>
-                  <span className="font-medium text-gray-700">{new Date(job.createdAt).toLocaleDateString("en-IN")}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Job Type</span>
-                  <span className="font-medium text-gray-700 capitalize">{job.jobType}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Experience</span>
-                  <span className="font-medium text-gray-700 capitalize">{job.experienceLevel}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Vacancies</span>
-                  <span className="font-medium text-gray-700">{job.openings || 1}</span>
-                </div>
-                <div className="flex justify-between">
+              <div className="space-y-2.5 text-xs text-gray-500">
+                {[
+                  ["Published",   new Date(job.createdAt).toLocaleDateString("en-IN")],
+                  ["Job Type",    job.jobType],
+                  ["Experience",  job.experienceLevel],
+                  ["Vacancies",   job.openings || 1],
+                ].map(([label, val]) => (
+                  <div key={label} className="flex justify-between">
+                    <span>{label}</span>
+                    <span className="font-semibold text-gray-700 capitalize">{val}</span>
+                  </div>
+                ))}
+                <div className="flex justify-between items-center">
                   <span>Status</span>
                   <StatusBadge status={job.status} />
                 </div>
@@ -328,11 +333,13 @@ const JobDetailPage = () => {
                 <h2 className="text-lg font-bold text-gray-900">Apply for {job.title}</h2>
                 <p className="text-sm text-gray-500">{job.company?.name}</p>
               </div>
-              <button onClick={() => setShowModal(false)} className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">✕</button>
+              <button onClick={() => setShowModal(false)}
+                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors text-lg leading-none">
+                ✕
+              </button>
             </div>
 
             <form onSubmit={handleApply} className="space-y-4">
-              {/* Resume section */}
               {user?.resume?.filename ? (
                 <div className="flex items-center gap-3 p-3.5 bg-green-50 border border-green-200 rounded-xl">
                   <CheckCircle2 size={16} className="text-green-600 shrink-0" />
@@ -364,11 +371,12 @@ const JobDetailPage = () => {
               />
 
               <div className="flex gap-3 pt-1">
-                <Button type="button" variant="secondary" size="lg" className="flex-1" onClick={() => setShowModal(false)}>
+                <Button type="button" variant="secondary" size="lg" className="flex-1"
+                  onClick={() => setShowModal(false)}>
                   Cancel
                 </Button>
                 <Button type="submit" size="lg" className="flex-1" isLoading={applying}>
-                  <Send size={14} /> Submit Application
+                  <Send size={14} /> Submit
                 </Button>
               </div>
             </form>
@@ -388,8 +396,12 @@ const Section = ({ title, children }) => (
 
 const MetaItem = ({ icon, label, value, highlight }) => (
   <div>
-    <div className="flex items-center gap-1.5 mb-1">{icon}<span className="text-[10px] uppercase tracking-wider text-gray-400 font-medium">{label}</span></div>
-    <p className={`text-sm font-semibold capitalize ${highlight ? "text-green-700" : "text-gray-800"}`}>{value}</p>
+    <div className="flex items-center gap-1.5 mb-1">{icon}
+      <span className="text-[10px] uppercase tracking-wider text-gray-400 font-medium">{label}</span>
+    </div>
+    <p className={`text-sm font-semibold capitalize ${highlight ? "text-green-700" : "text-gray-800"}`}>
+      {value}
+    </p>
   </div>
 );
 

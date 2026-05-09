@@ -1,2 +1,7 @@
 import api from "./axios";
-export const authAPI = { register: (d) => api.post("/auth/register", d), login: (d) => api.post("/auth/login", d), getMe: () => api.get("/auth/me") };
+
+export const authAPI = {
+  register: (data) => api.post("/auth/register", data),
+  login:    (data) => api.post("/auth/login", data),
+  getMe:    ()     => api.get("/auth/me"),
+};

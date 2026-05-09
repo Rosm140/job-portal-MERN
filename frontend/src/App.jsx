@@ -7,18 +7,19 @@ import {
 import Navbar from "./components/layout/Navbar";
 
 // Pages
-import HomePage        from "./pages/HomePage";
-import JobsPage        from "./pages/JobsPage";
-import JobDetailPage   from "./pages/JobDetailPage";
-import { LoginPage, RegisterPage } from "./pages/AuthPages";
+import HomePage      from "./pages/HomePage";
+import LoginPage     from "./pages/LoginPage";
+import RegisterPage  from "./pages/RegisterPage";
+import JobsPage      from "./pages/JobsPage";
+import JobDetailPage from "./pages/JobDetailPage";
 
-// Student
+// Student pages
 import ApplicationsPage   from "./pages/student/ApplicationsPage";
 import StudentProfilePage from "./pages/student/StudentProfilePage";
 import AIToolsPage        from "./pages/student/AIToolsPage";
 import BookmarksPage      from "./pages/student/BookmarksPage";
 
-// Admin
+// Admin pages
 import AdminDashboard    from "./pages/admin/AdminDashboard";
 import ManageJobsPage    from "./pages/admin/ManageJobsPage";
 import PostJobPage       from "./pages/admin/PostJobPage";
@@ -37,12 +38,13 @@ function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
+        {/* Light-theme toast notifications */}
         <Toaster
           position="top-right"
           toastOptions={{
             duration: 3500,
             style: {
-              background: "#fff",
+              background: "#ffffff",
               color: "#111827",
               border: "1px solid #e5e7eb",
               borderRadius: "12px",
@@ -53,32 +55,42 @@ function App() {
             error:   { iconTheme: { primary: "#dc2626", secondary: "#fff" } },
           }}
         />
+
         <Navbar />
 
         <Routes>
-          {/* Public */}
-          <Route path="/"        element={<HomePage />} />
-          <Route path="/jobs"    element={<JobsPage />} />
+          {/* ── Public ─────────────────────────────────────────────── */}
+          <Route path="/"         element={<HomePage />} />
+          <Route path="/jobs"     element={<JobsPage />} />
           <Route path="/jobs/:id" element={<JobDetailPage />} />
 
-          {/* Auth (redirect if already logged in) */}
+          {/* ── Auth (redirect if already logged in) ───────────────── */}
           <Route path="/login"    element={<PublicRoute><LoginPage /></PublicRoute>} />
           <Route path="/register" element={<PublicRoute><RegisterPage /></PublicRoute>} />
 
-          {/* Student */}
-          <Route path="/student/applications" element={<StudentRoute><ApplicationsPage /></StudentRoute>} />
-          <Route path="/student/profile"      element={<StudentRoute><StudentProfilePage /></StudentRoute>} />
-          <Route path="/student/ai-tools"     element={<StudentRoute><AIToolsPage /></StudentRoute>} />
-          <Route path="/student/bookmarks"    element={<StudentRoute><BookmarksPage /></StudentRoute>} />
+          {/* ── Student ────────────────────────────────────────────── */}
+          <Route path="/student/applications"
+            element={<StudentRoute><ApplicationsPage /></StudentRoute>} />
+          <Route path="/student/profile"
+            element={<StudentRoute><StudentProfilePage /></StudentRoute>} />
+          <Route path="/student/ai-tools"
+            element={<StudentRoute><AIToolsPage /></StudentRoute>} />
+          <Route path="/student/bookmarks"
+            element={<StudentRoute><BookmarksPage /></StudentRoute>} />
 
-          {/* Admin */}
-          <Route path="/admin/dashboard"                    element={<AdminRoute><AdminDashboard /></AdminRoute>} />
-          <Route path="/admin/jobs"                         element={<AdminRoute><ManageJobsPage /></AdminRoute>} />
-          <Route path="/admin/post-job"                     element={<AdminRoute><PostJobPage /></AdminRoute>} />
-          <Route path="/admin/post-job/:id"                 element={<AdminRoute><PostJobPage /></AdminRoute>} />
-          <Route path="/admin/jobs/:jobId/applications"     element={<AdminRoute><JobApplicantsPage /></AdminRoute>} />
+          {/* ── Admin ──────────────────────────────────────────────── */}
+          <Route path="/admin/dashboard"
+            element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+          <Route path="/admin/jobs"
+            element={<AdminRoute><ManageJobsPage /></AdminRoute>} />
+          <Route path="/admin/post-job"
+            element={<AdminRoute><PostJobPage /></AdminRoute>} />
+          <Route path="/admin/post-job/:id"
+            element={<AdminRoute><PostJobPage /></AdminRoute>} />
+          <Route path="/admin/jobs/:jobId/applications"
+            element={<AdminRoute><JobApplicantsPage /></AdminRoute>} />
 
-          {/* 404 */}
+          {/* ── 404 ────────────────────────────────────────────────── */}
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </AuthProvider>

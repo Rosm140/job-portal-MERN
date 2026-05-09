@@ -1,7 +1,7 @@
-import { useAdminStats } from "@/hooks/useApplications";
-import { useJobs } from "@/hooks/useJobs";
-import { useAuth } from "@/context/AuthContext";
-import { StatCard, LoadingPage, Card } from "@/components/ui";
+import { useAdminStats } from "../../hooks/useApplications";
+import { useJobs } from "../../hooks/useJobs";
+import { useAuth } from "../../context/AuthContext";
+import { StatCard, LoadingPage, Card } from "../../components/ui";
 import { Link } from "react-router-dom";
 import {
   Briefcase, Users, FileText, Clock, PlusCircle,

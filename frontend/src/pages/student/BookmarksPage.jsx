@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { jobsAPI } from "@/api/jobsAPI";
-import { LoadingPage, EmptyState, Button } from "@/components/ui";
-import JobCard from "@/components/jobs/JobCard";
+import { jobsAPI } from "../../api/jobsAPI";
+import { LoadingPage, EmptyState, Button } from "../../components/ui";
+import JobCard from "../../components/jobs/JobCard";
 import { BookMarked, Trash2 } from "lucide-react";
 
 const BookmarksPage = () => {

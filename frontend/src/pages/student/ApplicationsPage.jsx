@@ -1,5 +1,5 @@
-import { useMyApplications } from "@/hooks/useApplications";
-import { LoadingPage, EmptyState, StatusBadge, Button } from "@/components/ui";
+import { useMyApplications } from "../../hooks/useApplications";
+import { LoadingPage, EmptyState, StatusBadge, Button } from "../../components/ui";
 import { Link } from "react-router-dom";
 import {
   FileText, MapPin, Briefcase, Calendar, ChevronRight,

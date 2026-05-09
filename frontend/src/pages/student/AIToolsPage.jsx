@@ -4,26 +4,27 @@ import {
   TrendingUp, ChevronRight, Upload, Loader2,
   CheckCircle2, AlertCircle, Star, Zap, RefreshCw,
 } from "lucide-react";
-import { Button, Card, Textarea, Input } from "@/components/ui";
-import { useAuth } from "@/context/AuthContext";
+import { Button, Card, Textarea, Input } from "../../components/ui";
+import { useAuth } from "../../context/AuthContext";
 import toast from "react-hot-toast";
 
-// Ensure consistency: VITE_API_URL should always include /api. 
-const API_URL = "/api";
+const API_URL = import.meta.env.VITE_API_URL?.replace("/api", "") || "http://localhost:5000";
 
 // ── Claude API caller ─────────────────────────────────────────────────────
 const callClaude = async (systemPrompt, userMessage, onChunk) => {
-  const res = await fetch(`${API_URL}/ai/claude`, {
+  const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 1000,
       system: systemPrompt,
-      prompt: userMessage,
+      messages: [{ role: "user", content: userMessage }],
     }),
   });
   if (!res.ok) throw new Error("AI request failed");
   const data = await res.json();
-  return data.data?.text || data.text || "";
+  return data.content?.[0]?.text || "";
 };
 
 // ── Tool definitions ──────────────────────────────────────────────────────
